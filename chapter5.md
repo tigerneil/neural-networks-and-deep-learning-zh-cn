@@ -58,35 +58,35 @@ git clone https://github.com/mnielsen/neural-networks-and-deep-learning.git
 ... mnist_loader.load_data_wrapper()
 ```
 然后设置我们的网络：
-$$$$$$python
+```python
 >>> import network2
 >>> net = network2.Network([784, 30, 10])
-$$$$$$
-这个网络拥有 $$784$$ 个输入层神经元，对应于输入图片的 $$28*28=784$$ 个像素点。我们设置隐藏层神经元为 $$30$$ 个，输出层为 $$10$$ 个神经元，对应于 MNIST 数字 ('0', '1', ..., '9')。
-让我们训练 30 轮，使用 mini batch 大小为 10， 学习率 $$\eta = 0.1$$，正规化参数 $$\lambda = 5.0$$。在训练时，我们也会在验证集上监控分类的准确度：
-$$$$$$python
+```
+这个网络拥有 $$784$$ 个输入层神经元，对应于输入图片的 $$28*28=784$$ 个像素点。我们设置隐藏层神经元为 $$30$$ 个，输出层为 $$10$$ 个神经元，对应于 MNIST 数字 $$(0, 1, ..., 9)$$。
+让我们训练 $$30$$ 轮，使用 mini batch 大小为 $$10$$， 学习率 $$\eta = 0.1$$，正规化参数 $$\lambda = 5.0$$。在训练时，我们也会在验证集上监控分类的准确度：
+```python
 >>> net.SGD(training_data, 30, 10, 0.1, lmbda=5.0, 
 ... evaluation_data=validation_data, monitor_evaluation_accuracy=True)
-$$$$$$
+```
 最终我们得到了分类的准确率为 96.48%（也可能不同，每次运行实际上会有一点点的偏差）这和我们前面的结果相似。
 现在，我们增加另外一层隐藏层，同样地是 30 个神经元，试着使用相同的超参数进行训练：
-$$$$$$python
+```python
 >>> net = network2.Network([784, 30, 30, 10])
 >>> net.SGD(training_data, 30, 10, 0.1, lmbda=5.0, 
 ... evaluation_data=validation_data, monitor_evaluation_accuracy=True)
-$$$$$$
+```
 最终的结果分类准确度提升了一点，96.90%。这点令人兴奋：一点点的深度带来了效果。那么就再增加一层同样的隐藏层：
-$$$$$$python
+```python
 >>> net = network2.Network([784, 30, 30, 30, 10])
 >>> net.SGD(training_data, 30, 10, 0.1, lmbda=5.0, 
 ... evaluation_data=validation_data, monitor_evaluation_accuracy=True)
-$$$$$$
+```
 哦，这里并没有什么提升，反而下降到了 96.57%，这与最初的浅层网络相差无几。再增加一层：
-$$$$$$python
+```python
 >>> net = network2.Network([784, 30, 30, 30, 30, 10])
 >>> net.SGD(training_data, 30, 10, 0.1, lmbda=5.0, 
 ... evaluation_data=validation_data, monitor_evaluation_accuracy=True)
-$$$$$$
+```
 分类准确度又下降了，96.53%。这可能不是一个统计显著地下降，但是会让人们觉得沮丧。
 
 这里表现出来的现象看起非常奇怪。直觉地，额外的隐藏层应当让网络能够学到更加复杂的分类函数，然后可以在分类时表现得更好吧。可以肯定的是，事情并没有变差，至少新的层次增加上，在最坏的情形下也就是没有影响。事情并不是这样子的。
