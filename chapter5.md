@@ -175,7 +175,7 @@ $$\partial C/\partial b_1 = \sigma'(z_1)w_2\sigma'(z_2)...\sigma'(z_4)\frac{\par
 
 **为何出现梯度消失**：现在把梯度的整个表达式写下来：
 
-$$\partial C/\partial b_1 = \sigma'(z_1)w_2\sigma'(z_2)...\sigma'(z_4)\frac{\partial C}{\partial a_4}$$
+$$\partial C/\partial b_1 = \sigma'(z_1)w_2\sigma'(z_2)w_3\sigma'(z_3)\sigma'(z_4)\frac{\partial C}{\partial a_4}$$
 
 除了最后一项，该表达式是一系列形如 $$w_j \sigma'(z_j)$$ 的乘积。为了理解每个项的行为，先看看下面的sigmoid 函数导数的图像：
 
