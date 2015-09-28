@@ -68,8 +68,8 @@ git clone https://github.com/mnielsen/neural-networks-and-deep-learning.git
 >>> net.SGD(training_data, 30, 10, 0.1, lmbda=5.0, 
 ... evaluation_data=validation_data, monitor_evaluation_accuracy=True)
 ```
-最终我们得到了分类的准确率为 96.48%（也可能不同，每次运行实际上会有一点点的偏差）这和我们前面的结果相似。
-现在，我们增加另外一层隐藏层，同样地是 30 个神经元，试着使用相同的超参数进行训练：
+最终我们得到了分类的准确率为 $$96.48%$$（也可能不同，每次运行实际上会有一点点的偏差）这和我们前面的结果相似。
+现在，我们增加另外一层隐藏层，同样地是 $$30$$ 个神经元，试着使用相同的超参数进行训练：
 ```python
 >>> net = network2.Network([784, 30, 30, 10])
 >>> net.SGD(training_data, 30, 10, 0.1, lmbda=5.0, 
