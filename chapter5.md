@@ -48,7 +48,9 @@
 ```
 git clone https://github.com/mnielsen/neural-networks-and-deep-learning.git
 ```
+
 如果你不使用 `git`，那么就直接从这里（[here](https://github.com/mnielsen/neural-networks-and-deep-learning/archive/master.zip)）下载数据和代码。然后需要转入 `src` 子目录。
+
 接着从 python 的 shell 就可以载入 MNIST 数据：
 ```python
 >>> import mnist_loader
