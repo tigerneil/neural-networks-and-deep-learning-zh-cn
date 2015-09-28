@@ -179,7 +179,7 @@ $$\partial C/\partial b_1 = \sigma'(z_1)w_2\sigma'(z_2)w_3\sigma'(z_3)\sigma'(z_
 
 除了最后一项，该表达式是一系列形如 $$w_j \sigma'(z_j)$$ 的乘积。为了理解每个项的行为，先看看下面的sigmoid 函数导数的图像：
 
-$$\partial C/\partial b_1 = \sigma'(z_1)w_2\sigma'(z_2)w_3\sigma'(z_3)\sigma'(z_4)\frac{\partial C}{\partial a_4}$$
+![Paste_Image.png](http://upload-images.jianshu.io/upload_images/42741-b8463ae3739bf716.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 该导数在 $$\sigma'(0)=1/4$$ 时达到最高。现在，如果我们使用标准方法来初始化网络中的权重，那么会使用一个均值为 $$0$$ 标准差为 $$1$$ 的高斯分布。因此所有的权重通常会满足 $$|w_j| < 1$$。有了这些信息，我们发现会有 $$w_j \sigma'(z_j) < 1/4$$。并且在我们进行了所有这些项的乘积时，最终结果肯定会指数级下降：项越多，乘积的下降的越快。**这里我们敏锐地嗅到了消失的梯度问题的合理解释。
 
