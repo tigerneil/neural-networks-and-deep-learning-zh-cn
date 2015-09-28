@@ -1,10 +1,36 @@
 {
-    "plugins": ["mathjax"]
-}
-{
-    "pluginsConfig": {
-        "mathjax":{
-            "forceSVG": true
+    "author": "Xiaohu (Neil) Zhu <xhzhu.nju@gmail.com>",
+    "description": "Translation for NNDL by Michael Nielsen",
+    "extension": null,
+    "generator": "site",
+    "isbn": null,
+    "links": {
+        "sharing": {
+            "all": null,
+            "facebook": null,
+            "google": null,
+            "twitter": null,
+            "weibo": null
+        },
+        "sidebar": {
+            "Not_GOD's homepage": "http://www.jianshu.com/users/696dc6c6f01c/"
         }
-    }
+    },
+    "output": null,
+    "pdf": {
+        "fontSize": 12,
+        "footerTemplate": null,
+        "headerTemplate": null,
+        "margin": {
+            "bottom": 36,
+            "left": 62,
+            "right": 62,
+            "top": 36
+        },
+        "pageNumbers": false,
+        "paperSize": "a4"
+    },
+    "plugins": [],
+    "title": "Sample GitBook",
+    "variables": {}
 }
