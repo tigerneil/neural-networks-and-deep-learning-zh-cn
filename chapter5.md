@@ -147,22 +147,26 @@ git clone https://github.com/mnielsen/neural-networks-and-deep-learning.git
 ![](http://upload-images.jianshu.io/upload_images/42741-85e683116b6b0c38.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 
-表达式结构如下：对每个神经元有一个 $$\sigma'(z_j)$$ 项；对每个权重有一个 $$w_j$$ 项；还有一个 $$dC/da_4$$项，表示最后的代价函数。注意，我已经将表达式中的每个项置于了对应的位置。所以网络本身就是表达式的解读。
+表达式结构如下：对每个神经元有一个 $$\sigma'(z_j)$$ 项；对每个权重有一个 $$w_j$$ 项；还有一个  $$\partial C/\partial a_4$$项，表示最后的代价函数。注意，我已经将表达式中的每个项置于了对应的位置。所以网络本身就是表达式的解读。
 你可以直接认可这个表达式，直接跳到[该表达式如何关联于小时的梯度问题的](http://neuralnetworksanddeeplearning.com/chap5.html#discussion_why)。这对理解没有影响，因为实际上上面的表达式只是前面对于[BP 的讨论](http://neuralnetworksanddeeplearning.com/chap2.html#the_four_fundamental_equations_behind_backpropagation)的特例。但是也包含了一个表达式正确的解释，所以去看看那个解释也是很有趣的（也可能更有启发性吧）。
+
 假设我们对偏差 $$b_1$$ 进行了微小的调整 $$\Delta b_1$$。这会导致网络中剩下的元素一系列的变化。首先会对第一个隐藏元输出产生一个 $$\Delta a_1$$ 的变化。这样就会导致第二个神经元的带权输入产生 $$\Delta z_2$$ 的变化。从第二个神经元输出随之发生 $$\Delta a_2$$ 的变化。以此类推，最终会对代价函数产生 $$\Delta C$$ 的变化。这里我们有：
 
-![Paste_Image.png](http://upload-images.jianshu.io/upload_images/42741-be44156d5bc15274.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-这表示我们可以通过仔细追踪每一步的影响来搞清楚 $$dC/db_1$$ 的表达式。
+$$\frac{\partial C}{\partial b_1}\approx \frac{\Delta C}{\Delta b_1}$$
+
+这表示我们可以通过仔细追踪每一步的影响来搞清楚 $$\partial C/\partial b_1$$ 的表达式。
 现在我们看看 $$\Delta b_1$$ 如何影响第一个神经元的输出 $$a_1$$ 的。我们有 $$a_1 = \sigma(z_1) = \sigma(w_1 * a_0 + b1)$$，所以有
+$$\Delta a_1 \approx \frac{\partial \sigma(w_1a_0 + b_1)}{\partial b_1} \Delta b_1 = \sigma'(z_1)\Delta b_1$$
 
-![Paste_Image.png](http://upload-images.jianshu.io/upload_images/42741-421ce31fac2adb13.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-$$\sigma'(z_1)$$ 这项看起很熟悉：其实是我们上面关于 $$dC/db_1$$ 的表达式的第一项。直觉上看，这项将偏差的改变 $$\Delta b_1$$ 转化成了输出的变化 $$\Delta a_1$$。$$\Delta a_1$$ 随之又影响了带权输入 $$z_2 = w_2 * a_1 + b_2$$:
+$$\sigma'(z_1)$$ 这项看起很熟悉：其实是我们上面关于 $$\partial C/\partial b_1$$ 的表达式的第一项。直觉上看，这项将偏差的改变 $$\Delta b_1$$ 转化成了输出的变化 $$\Delta a_1$$。$$\Delta a_1$$ 随之又影响了带权输入 $$z_2 = w_2 * a_1 + b_2$$:
+$$\Delta z_2 \approx \frac{\partial z_2}{\partial a_1}\Delta a_1 = w_2 \Delta a_1$$
 
-![Paste_Image.png](http://upload-images.jianshu.io/upload_images/42741-a205c86068b6eea7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 将 $$\Delta z_2$$ 和 $$\Delta a_1$$ 的表达式组合起来，我们可以看到偏差 $$b_1$$ 中的改变如何通过网络传输影响到 $$z_2$$的：
+$$$$
 
 ![Paste_Image.png](http://upload-images.jianshu.io/upload_images/42741-f3311f3054c6b500.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-现在，又能看到类似的结果了：我们得到了在表达式 $$dC/db_1$$ 的前面两项。以此类推下去，跟踪传播改变的路径就可以完成。在每个神经元，我们都会选择一个 $$\sigma'(z_j)$$ 的项，然后在每个权重我们选择出一个 $$w_j$$ 项。最终的结果就是代价函数中变化 $$\Delta C$$ 的相关于偏差 $$\Delta b_1$$ 的表达式：
+
+现在，又能看到类似的结果了：我们得到了在表达式 $$\partial C/\partial b_1$$ 的前面两项。以此类推下去，跟踪传播改变的路径就可以完成。在每个神经元，我们都会选择一个 $$\sigma'(z_j)$$ 的项，然后在每个权重我们选择出一个 $$w_j$$ 项。最终的结果就是代价函数中变化 $$\Delta C$$ 的相关于偏差 $$\Delta b_1$$ 的表达式：
 
 ![Paste_Image.png](http://upload-images.jianshu.io/upload_images/42741-4998b0bd9c449ee6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 除以 $$\Delta b_1$$，我们的确得到了梯度的表达式：
