@@ -1,4 +1,4 @@
-假设你是一名工程师，接到一项从头开始设计计算机的任务。某天，你在工作室工作，设计逻辑电路，构建 AND 门，OR  门等等时，老板带着坏消息进来：客户刚刚添加了一个奇特的设计需求：整个计算机的线路的深度必须只有两层：
+假设你是一名工程师，接到一项从头开始设计计算机的任务。某天，你在工作室工作，设计逻辑电路，构建 `AND` 门，`OR` 门等等时，老板带着坏消息进来：客户刚刚添加了一个奇特的设计需求：整个计算机的线路的深度必须只有两层：
 
 ![两层线路](http://upload-images.jianshu.io/upload_images/42741-2ac93b02061c5706.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
@@ -13,26 +13,35 @@
 ![加法线路](http://upload-images.jianshu.io/upload_images/42741-e31ceef17750198e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 最终的线路包含至少三层线路的单元。实际上，这个线路很可能会超过三层，因为我们可以将子任务分解成比上述更小的单元。但是基本思想就是这样。
+
 因此深度线路让这样的设计过程变得更加简单。但是这对于设计本身帮助并不大。其实，数学证明对于某些函数设计的非常浅的线路可能需要指数级的线路单元来计算。例如，在1980年代早期的一系列著名的论文已经给出了计算比特的集合的奇偶性通过浅的线路来计算需要指数级的门。另一当面，如果你使用更深的线路，那么可以使用规模很小的线路来计算奇偶性：仅仅需要计算比特的对的奇偶性，然后使用这些结果来计算比特对的对的奇偶性，以此类推，构建出总共的奇偶性。深度线路这样就能从本质上获得超过浅线路的更强的能力。
+
 到现在为止，本书讲神经网络看作是疯狂的客户。几乎我们遇到的所有的网络就只包括一层隐含神经元（另外还有输入输出层）：
 
 ![浅层神经网络](http://upload-images.jianshu.io/upload_images/42741-a114c13fb40b22fa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 这些简单的网络已经非常有用了：在前面的章节中，我们使用这样的网络可以进行准确率高达 98% 的手写数字的识别！而且，直觉上看，我们期望拥有更多隐含层的神经网络能够变的更加强大：
 
 ![深度神经网络](http://upload-images.jianshu.io/upload_images/42741-d8b15504efa7e89a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 这样的网络可以使用中间层构建出多层的抽象，正如我们在布尔线路中做的那样。例如，如果我们在进行视觉模式识别，那么在第一层的神经元可能学会识别边，在第二层的神经元可以在边的基础上学会识别出更加复杂的形状，例如三角形或者矩形。第三层将能够识别更加复杂的形状。依此类推。这些多层的抽象看起来能够赋予深度网络一种学习解决复杂模式识别问题的能力。然后，正如线路的示例中看到的那样，存在着理论上的研究结果告诉我们深度网络在本质上比浅层网络更加强大。
 
-> 对某些问题和网络结构，Razvan Pascanu, Guido Montúfar, and Yoshua Bengio 在2014年的这篇文章 [On the number of response regions of deep feed forward networks with piece-wise linear activations](http://arxiv.org/pdf/1312.6098.pdf)给出了证明。更加详细的讨论在Yoshua Bengio 2009年的著作 [Learning deep architectures for AI](http://www.iro.umontreal.ca/~bengioy/papers/ftml_book.pdf) 的第二部分。
+> 对某些问题和网络结构，Razvan Pascanu, Guido Montúfar, and Yoshua Bengio 在2014年的这篇文章[On the number of response regions of deep feed forward networks with piece-wise linear activations](http://arxiv.org/pdf/1312.6098.pdf)给出了证明。更加详细的讨论在Yoshua Bengio 2009年的著作[Learning deep architectures for AI](http://www.iro.umontreal.ca/~bengioy/papers/ftml_book.pdf) 的第二部分。
 
 那我们如何训练这样的深度神经网络呢？在本章中，我们尝试使用基于 BP 的随机梯度下降的方法来训练。但是这会产生问题，因为我们的深度神经网络并不能比浅层网络性能好太多。
+
 这个失败的结果好像与上面的讨论相悖。这就能让我们退缩么，不，我们要深入进去试着理解使得深度网络训练困难的原因。仔细研究一下，就会发现，在深度网络中，不同的层学习的速度差异很大。尤其是，在网络中后面的层学习的情况很好的时候，先前的层次常常会在训练时停滞不变，基本上学不到东西。这种停滞并不是因为运气不好。而是，有着更加根本的原因是的学习的速度下降了，这些原因和基于梯度的学习技术**相关**。
+
 当我们更加深入地理解这个问题时，发现相反的情形同样会出现：先前的层可能学习的比较好，但是后面的层却停滞不变。实际上，我们发现在深度神经网络中使用基于梯度下降的学习方法本身存在着内在不稳定性。这种不稳定性使得先前或者后面的层的学习过程阻滞。
+
 这个的确是坏消息。但是真正理解了这些难点后，我们就能够获得高效训练深度网络的更深洞察力。而且这些发现也是下一章的准备知识，我们到时会介绍如何使用深度学习解决图像识别问题。
+
 # （消失的恋人，哦不）消失的梯度问题
 那么，在我们训练深度网络时究竟哪里出了问题？
+
 为了回答这个问题，让我们重新看看使用单一隐藏层的神经网络示例。这里我们也是用 MNIST 数字分类问题作为研究和实验的对象。
-> MNIST 问题和数据在这里（[here](http://neuralnetworksanddeeplearning.com/chap1.html#learning_with_gradient_descent) ）和这里（ [here](http://neuralnetworksanddeeplearning.com/chap1.html#implementing_our_network_to_classify_digits)）.
+
+> MNIST 问题和数据在这里（[here](http://neuralnetworksanddeeplearning.com/chap1.html#learning_with_gradient_descent) ）和（[here](http://neuralnetworksanddeeplearning.com/chap1.html#implementing_our_network_to_classify_digits)）.
 
 这里你也可以在自己的电脑上训练神经网络。或者就直接读下去。如果希望实际跟随这些步骤，那就需要在电脑上安装 python 2.7，numpy和代码，可以通过下面的命令复制所需要的代码
 ```
