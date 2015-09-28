@@ -162,27 +162,26 @@ $$\sigma'(z_1)$$ 这项看起很熟悉：其实是我们上面关于 $$\partial 
 $$\Delta z_2 \approx \frac{\partial z_2}{\partial a_1}\Delta a_1 = w_2 \Delta a_1$$
 
 将 $$\Delta z_2$$ 和 $$\Delta a_1$$ 的表达式组合起来，我们可以看到偏差 $$b_1$$ 中的改变如何通过网络传输影响到 $$z_2$$的：
-$$$$
-
-![Paste_Image.png](http://upload-images.jianshu.io/upload_images/42741-f3311f3054c6b500.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+$$\Delta \approx \sigma'(z_1)w_2\Delta b_1$$
 
 现在，又能看到类似的结果了：我们得到了在表达式 $$\partial C/\partial b_1$$ 的前面两项。以此类推下去，跟踪传播改变的路径就可以完成。在每个神经元，我们都会选择一个 $$\sigma'(z_j)$$ 的项，然后在每个权重我们选择出一个 $$w_j$$ 项。最终的结果就是代价函数中变化 $$\Delta C$$ 的相关于偏差 $$\Delta b_1$$ 的表达式：
 
-![Paste_Image.png](http://upload-images.jianshu.io/upload_images/42741-4998b0bd9c449ee6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+$$\Delta C \approx \sigma'(z_1)w_2\sigma'(z_2)...\sigma'(z_4)\frac{\partial C}{\partial a_4}\Delta b_1$$
+
 除以 $$\Delta b_1$$，我们的确得到了梯度的表达式：
 
 ![Paste_Image.png](http://upload-images.jianshu.io/upload_images/42741-6c3679b8de7e103c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 **为何出现梯度消失**：现在把梯度的整个表达式写下来：
 
-
-![Paste_Image.png](http://upload-images.jianshu.io/upload_images/42741-38a11c686af36129.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+$$\partial C/\partial b_1 = \sigma'(z_1)w_2\sigma'(z_2)...\sigma'(z_4)\frac{\partial C}{\partial a_4}$$
 
 除了最后一项，该表达式是一系列形如 $$w_j \sigma'(z_j)$$ 的乘积。为了理解每个项的行为，先看看下面的sigmoid 函数导数的图像：
 
-![Paste_Image.png](http://upload-images.jianshu.io/upload_images/42741-b8463ae3739bf716.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+$$\partial C/\partial b_1 = \sigma'(z_1)w_2\sigma'(z_2)w_3\sigma'(z_3)\sigma'(z_4)\frac{\partial C}{\partial a_4}$$
+
 该导数在 $$\sigma'(0)=1/4$$ 时达到最高。现在，如果我们使用标准方法来初始化网络中的权重，那么会使用一个均值为 0 标准差为 1 的高斯分布。因此所有的权重通常会满足 $$|w_j| < 1$$。有了这些信息，我们发现会有 $$w_j \sigma'(z_j) < 1/4$$。并且在我们进行了所有这些项的乘积时，最终结果肯定会指数级下降：项越多，乘积的下降的越快。**这里我们敏锐地嗅到了消失的梯度问题的合理解释。
-更明白一点，我们比较一下 $$dC/db_1$$ 和一个更后面一些的偏差的梯度，不妨设为 $$dC/db_3$$。当然，我们还没有显式地给出这个表达式，但是计算的方式是一样的。
+更明白一点，我们比较一下 $$\partial C/\partial b_1$$ 和一个更后面一些的偏差的梯度，不妨设为 $$\partial C/\partial b_3$$。当然，我们还没有显式地给出这个表达式，但是计算的方式是一样的。
 
 ![比较梯度的表达式](http://upload-images.jianshu.io/upload_images/42741-c3e726d5fabd62d1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 两个表示式有很多相同的项。但是 $$dC/db_1$$ 还多包含了两个项。由于这些项都是 $$< 1/4$$ 的。所以  $$dC/db_1$$ 会是 $$dC/db_3$$ 的 1/16 或者更小。**这其实就是消失的梯度出现的本质原因了。**
