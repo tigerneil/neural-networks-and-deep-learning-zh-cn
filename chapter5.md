@@ -44,6 +44,7 @@
 > MNIST 问题和数据在（[这里](http://neuralnetworksanddeeplearning.com/chap1.html#learning_with_gradient_descent) ）和（[这里](http://neuralnetworksanddeeplearning.com/chap1.html#implementing_our_network_to_classify_digits)）.
 
 这里你也可以在自己的电脑上训练神经网络。或者就直接读下去。如果希望实际跟随这些步骤，那就需要在电脑上安装 python 2.7，numpy和代码，可以通过下面的命令复制所需要的代码
+
 ```
 git clone https://github.com/mnielsen/neural-networks-and-deep-learning.git
 ```
