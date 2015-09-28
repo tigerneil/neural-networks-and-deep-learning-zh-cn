@@ -213,9 +213,10 @@ $$\frac{2}{|w|}\ln(\frac{|w|(1+\sqrt(1-4/|w|))}{2}-1)$$
 现在已经研究了简单的网络，每一层只包含一个神经元。那么那些每层包含很多神经元的更加复杂的深度网络呢？
 
 ![Paste_Image.png](http://upload-images.jianshu.io/upload_images/42741-92d5323e92ee8d20.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-实际上，在这样的神经网络中，同样的情况也会发生。在前面关于 BP 的章节中，我们看到了在一个共 $$L$$ 层的第 l 层的梯度：
 
-![Paste_Image.png](http://upload-images.jianshu.io/upload_images/42741-d2d16622d7ff4d74.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+实际上，在这样的神经网络中，同样的情况也会发生。在前面关于 BP 的章节中，我们看到了在一个共 $$L$$ 层的第 $$l$$ 层的梯度：
+
+$$\delta^l = \Sigma'(z^l)*(w^{l+1})^T\Sigma'(z^{l+1})(w^{l+2})^T...\Sigma'(z^L)\nabla_{a} C$$
 
 这里 $$\Sigma'(z^l)$$是一个对角矩阵，每个元素是对第 l 层的带权输入 $$\sigma'(z)$$。而 $$w^l$$ 是对不同层的权值矩阵。$$\nabla_{a} C$$ 是对每个输出激活的偏导数向量。
 
