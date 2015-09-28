@@ -30,7 +30,7 @@
         "pageNumbers": false,
         "paperSize": "a4"
     },
-    "plugins": [],
+    "plugins": ["mathjax"],
     "title": "Sample GitBook",
     "variables": {}
 }
