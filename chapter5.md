@@ -75,7 +75,7 @@ git clone https://github.com/mnielsen/neural-networks-and-deep-learning.git
 >>> net.SGD(training_data, 30, 10, 0.1, lmbda=5.0, 
 ... evaluation_data=validation_data, monitor_evaluation_accuracy=True)
 ```
-最终的结果分类准确度提升了一点，96.90%。这点令人兴奋：一点点的深度带来了效果。那么就再增加一层同样的隐藏层：
+最终的结果分类准确度提升了一点，$$96.90%$$。这点令人兴奋：一点点的深度带来了效果。那么就再增加一层同样的隐藏层：
 ```python
 >>> net = network2.Network([784, 30, 30, 30, 10])
 >>> net.SGD(training_data, 30, 10, 0.1, lmbda=5.0, 
@@ -87,7 +87,7 @@ git clone https://github.com/mnielsen/neural-networks-and-deep-learning.git
 >>> net.SGD(training_data, 30, 10, 0.1, lmbda=5.0, 
 ... evaluation_data=validation_data, monitor_evaluation_accuracy=True)
 ```
-分类准确度又下降了，96.53%。这可能不是一个统计显著地下降，但是会让人们觉得沮丧。
+分类准确度又下降了，$$96.53%$$。这可能不是一个统计显著地下降，但是会让人们觉得沮丧。
 
 这里表现出来的现象看起非常奇怪。直觉地，额外的隐藏层应当让网络能够学到更加复杂的分类函数，然后可以在分类时表现得更好吧。可以肯定的是，事情并没有变差，至少新的层次增加上，在最坏的情形下也就是没有影响。事情并不是这样子的。
 
