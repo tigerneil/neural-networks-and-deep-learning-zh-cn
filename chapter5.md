@@ -50,8 +50,8 @@ git clone https://github.com/mnielsen/neural-networks-and-deep-learning.git
 >>> import network2
 >>> net = network2.Network([784, 30, 10])
 ```
-这个网络拥有 784 个输入层神经元，对应于输入图片的 $$28*28=784$$ 个像素点。我们设置隐藏层神经元为 30 个，输出层为 10 个神经元，对应于 MNIST 数字 `('0', '1', ..., '9')`。
-让我们训练 30 轮，使用 mini batch 大小为 10， 学习率 `\eta = 0.1`，正规化参数 `\lambda = 5.0`。在训练时，我们也会在验证集上监控分类的准确度：
+这个网络拥有 $$784$$ 个输入层神经元，对应于输入图片的 $$28*28=784$$ 个像素点。我们设置隐藏层神经元为 30 个，输出层为 10 个神经元，对应于 MNIST 数字 ('0', '1', ..., '9')。
+让我们训练 30 轮，使用 mini batch 大小为 10， 学习率 $$\eta = 0.1$$，正规化参数 `\lambda = 5.0`。在训练时，我们也会在验证集上监控分类的准确度：
 ```python
 >>> net.SGD(training_data, 30, 10, 0.1, lmbda=5.0, 
 ... evaluation_data=validation_data, monitor_evaluation_accuracy=True)
