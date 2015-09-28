@@ -171,7 +171,7 @@ $$\Delta C \approx \sigma'(z_1)w_2\sigma'(z_2)...\sigma'(z_4)\frac{\partial C}{\
 
 除以 $$\Delta b_1$$，我们的确得到了梯度的表达式：
 
-![Paste_Image.png](http://upload-images.jianshu.io/upload_images/42741-6c3679b8de7e103c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+$$\partial C/\partial b_1 = \sigma'(z_1)w_2\sigma'(z_2)...\sigma'(z_4)\frac{\partial C}{\partial a_4}$$
 
 **为何出现梯度消失**：现在把梯度的整个表达式写下来：
 
