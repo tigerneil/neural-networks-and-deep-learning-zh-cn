@@ -138,7 +138,7 @@ git clone https://github.com/mnielsen/neural-networks-and-deep-learning.git
 
 ![简单的深度神经网络](http://upload-images.jianshu.io/upload_images/42741-d48cbe882012cc1c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-这里，$$w_1, w_2, ...$$ 是权重，而 $$b_1, b_2, ...$$ 是偏差，$$C$$ 则是某个代价函数。回顾一下，从第 $$j$$ 个神经元的输出 $$a_j = \sigma(z_j)$$，其中 $$\sigma$$ 是通常的 sigmoid 函数，而 $$z_j = w_j * a_j-1 + b_j$$是神经元的带权输入。我已经在最后表示出了代价函数 $$C$$ 来强调代价是网络输出 $$a_4$$ 的函数：如果实际输出越接近目标输出，那么代价会变低；相反则会变高。
+这里，$$w_1, w_2, ...$$ 是权重，而 $$b_1, b_2, ...$$ 是偏差，$$C$$ 则是某个代价函数。回顾一下，从第 $$j$$ 个神经元的输出 $$a_j = \sigma(z_j)$$，其中 $$\sigma$$ 是通常的 sigmoid 函数，而 $$z_j = w_j * a_{j-1} + b_j$$是神经元的带权输入。我已经在最后表示出了代价函数 $$C$$ 来强调代价是网络输出 $$a_4$$ 的函数：如果实际输出越接近目标输出，那么代价会变低；相反则会变高。
 
 现在我们要来研究一下关联于第一个隐藏神经元梯度 $$\partial C/\partial b_1$$。我们将会计算出$$\partial C/\partial b_1$$ 的表达式，通过研究表达式来理解消失的梯度发生的原因。
 
