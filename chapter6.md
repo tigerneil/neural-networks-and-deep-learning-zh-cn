@@ -38,7 +38,7 @@
 
 如果你要继续跟下去，就需要安装 Theano。跟随[这些参考](http://deeplearning.net/software/theano/) 就可以安装 Theano 了。后面的例子在 Theano 0.6 上运行。有些是在 Mac OS X Yosemite上，没有 GPU。有些是在 Ubuntu 14.4 上，有 NVIDIA GPU。还有一些在两种情况都有运行。为了让 `network3.py` 运行，你需要在 `network3.py` 的源码中将 `GPU` 置为 True 或者 False。除此之外，让 Theano 在 GPU 上运行，你可能要参考 [the instructions here](http://deeplearning.net/software/theano/tutorial/using_gpu.html)。网络上还有很多的教程，用 Google 很容易找到。如果没有 GPU，也可以使用 [Amazon Web Services](http://aws.amazon.com/ec2/instance-types/) EC2 G2 spot instances。注意即使是 GPU，训练也可能花费很多时间。很多实验花了数分钟或者数小时才完成。在 CPU 上，则可能需要好多天才能运行完最复杂的实验。正如在前面章节中提到的那样，我建议你搭建环境，然后阅读，偶尔回头再检查代码的输出。如果你使用 CPU，可能要降低训练的次数，甚至跳过这些实验。
 
-为了获得一个基准，我们将启用一个浅层的架构，仅仅使用单一的隐藏层，包含 100 个隐藏元。训练 60 次，使用学习率为 $$\eta = 0.1$$，mini-batch 大小为 10，无规范化。Let‘s go：
+为了获得一个基准，我们将启用一个浅层的架构，仅仅使用单一的隐藏层，包含 $$100$$ 个隐藏元。训练 $$60$$ 次，使用学习率为 $$\eta = 0.1$$，mini-batch 大小为 $$10$$，无规范化。Let‘s go：
 ```python
 >>> import network3
 >>> from network3 import Network
