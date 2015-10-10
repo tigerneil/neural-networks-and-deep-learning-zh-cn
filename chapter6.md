@@ -539,7 +539,7 @@ def dropout_layer(layer, p_dropout):
 
 * 在本章前面我曾经描述过一种通过应用微小的旋转、扭曲和变化来扩展训练数据的方法。改变 `network3.py` 来加入这些技术。注意：除非你有充分多的内存，否则显式地产生整个扩展数据集是不大现实的。所以要考虑一些变通的方法。
 
-* 在 `network3.py` 中增加 load 和 save 方法。
+* 在 `network3.py` 中增加 `load` 和 `save` 方法。
 
 * 当前的代码缺点就是只有很少的用来诊断的工具。你能想出一些诊断方法告诉我们网络过匹配到什么程度么？加上这些方法。
 
@@ -553,26 +553,26 @@ def dropout_layer(layer, p_dropout):
 
 本节内容和本书其他大部分都不一样。整本书，我都专注在那些可能会成为持久性的方法上——诸如 BP、规范化、和卷积网络。我已经尽量避免提及那些在我写书时很热门但长期价值未知的研究内容了。在科学领域，这样太过热门容易消逝的研究太多了，最终对科学发展的价值却是很微小的。所以，可能会有人怀疑：“好吧，在图像识别中近期的发展就是这种情况么？两到三年后，事情将发生变化。所以，肯定这些结果仅仅是一些想在研究前沿阵地领先的专家的专属兴趣而已？为何又费力来讨论这个呢？”
 
-这种怀疑是正确的，近期研究论文中一些改良的细节最终会失去其自身的重要性。过去几年里，我们已经看到了使用深度学习解决特别困难的图像识别任务上巨大进步。假想一个科学史学者在 2100 年写起计算机视觉。他们肯定会将 2011 到 2015（可能再加上几年）这几年作为使用深度卷积网络获得重大突破的时段。但这并不意味着深度卷积网络，还有dropout RLU等等，在 2100 年仍在使用。但这确实告诉我们在思想的历史上，现在，正发生着重要的转变。这有点像原子的发现，抗生素的发明：在历史的尺度上的发明和发现。所以，尽管我们不会深入这些细节，但仍值得从目前正在发生的研究成果中获得一些令人兴奋的研究发现。
+这种怀疑是正确的，近期研究论文中一些改良的细节最终会失去其自身的重要性。过去几年里，我们已经看到了使用深度学习解决特别困难的图像识别任务上巨大进步。假想一个科学史学者在 2100 年写起计算机视觉。他们肯定会将 2011 到 2015（可能再加上几年）这几年作为使用深度卷积网络获得重大突破的时段。但这并不意味着深度卷积网络，还有dropout、RLU等等，在 2100 年仍在使用。但这确实告诉我们在思想的历史上，现在，正发生着重要的转变。这有点像原子的发现，抗生素的发明：在历史的尺度上的发明和发现。所以，尽管我们不会深入这些细节，但仍值得从目前正在发生的研究成果中获得一些令人兴奋的研究发现。
 
-**The 2012 LRMD paper**：让我们从一篇来自 Stanford 和 Google 的研究者的论文开始。后面将这篇论文简记为 LRMD，前四位作者的姓的首字母命名。LRMD 使用神经网络对 [ImageNet](http://www.image-net.org/) 的图片进行分类，这是一个具有非常挑战性的图像识别问题。2011 年 ImageNet 数据包含了 16,000,000 的全色图像，有 20,000 个类别。图像从开放的网络上爬去，由 Amazon Mechanical Turk 服务的工人分类。下面是几幅 ImageNet 的图像：
+**The 2012 LRMD paper**：让我们从一篇来自 Stanford 和 Google 的研究者的论文开始。后面将这篇论文简记为 LRMD，前四位作者的姓的首字母命名。LRMD 使用神经网络对 [ImageNet](http://www.image-net.org/) 的图片进行分类，这是一个具有非常挑战性的图像识别问题。2011 年 ImageNet 数据包含了 $$16,000,000$$ 的全色图像，有 $$20,000$$ 个类别。图像从开放的网络上爬去，由 Amazon Mechanical Turk 服务的工人分类。下面是几幅 ImageNet 的图像：
 
 
 ![Paste_Image.png](http://upload-images.jianshu.io/upload_images/42741-008dc2948e673cba.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 上面这些分别属于 **圆线刨**，**棕色烂根须**，**加热的牛奶**，及 **通常的蚯蚓**。如果你想挑战一下，你可以访问[hand tools](http://www.image-net.org/synset?wnid=n03489162)，里面包含了一系列的区分的任务，比如区分 **圆线刨**、**短刨**、**倒角刨**以及其他十几种类型的刨子和其他的类别。我不知道读者你是怎么样一个人，但是我不能将所有这些工具类型都确定地区分开。这显然是比 MNIST 任务更具挑战性的任务。LRMD 网络获得了不错的 15.8% 的准确度。这看起很不给力，但是在先前最优的 9.3% 准确度上却是一个大的突破。这个飞跃告诉人们，神经网络可能会成为一个对非常困难的图像识别任务的强大武器。
 
-**The 2012 KSH paper**：在 2012 年，出现了一篇 LRMD 后续研究 Krizhevsky, Sutskever and Hinton (KSH)。KSH 使用一个受限 ImageNet 的子集数据训练和测试了一个深度卷积神经网络。这个数据集是机器学习竞赛常用的一个数据集——ImageNet Large-Scale Visual Recognition Challenge（ILSVRC）。使用一个竞赛数据集可以方便比较神经网络和其他方法之间的差异。ILSVRC-2012 训练集包含 120,000 幅 ImageNet 的图像，共有 1,000 类。验证集和测试集分别包含 50,000 和 150,000 幅，也都是同样的 1,000 类。
+**The 2012 KSH paper**：在 2012 年，出现了一篇 LRMD 后续研究 Krizhevsky, Sutskever and Hinton (KSH)。KSH 使用一个受限 ImageNet 的子集数据训练和测试了一个深度卷积神经网络。这个数据集是机器学习竞赛常用的一个数据集——ImageNet Large-Scale Visual Recognition Challenge（ILSVRC）。使用一个竞赛数据集可以方便比较神经网络和其他方法之间的差异。ILSVRC-2012 训练集包含 $$120,000$$ 幅 ImageNet 的图像，共有 $$1,000$$ 类。验证集和测试集分别包含 $$50,000$$ 和 $$150,000$$ 幅，也都是同样的 $$1,000$$ 类。
 
 ILSVRC 竞赛中一个难点是许多图像中包含多个对象。假设一个图像展示出一只拉布拉多犬追逐一只足球。所谓“正确的”分类可能是拉布拉多犬。但是算法将图像归类为足球就应该被惩罚么？由于这样的模糊性，我们做出下面设定：如果实际的ImageNet分类是出于算法给出的最可能的 5 类，那么算法最终被认为是正确的。KSH 深度卷积网络达到了 84.7% 的准确度，比第二名的 73.8% 高出很多。使用更加严格度量，KSH 网络业达到了 63.3% 的准确度。
 
 我们这里会简要说明一下 KSH 网络，因为这是后续很多工作的源头。而且它也和我们之前给出的卷积网络相关，只是更加复杂精细。KSH 使用深度卷积网络，在两个 GPU 上训练。使用两个 GPU 因为 GPU 的型号使然（NVIDIA GeForce GTX 580 没有足够大的内存来存放整个网络）所以用这样的方式进行内存的分解。
 
-KSH 网络有 7 个隐藏层。前 5 个隐藏层是卷积层（可能会包含 max-pooling），而后两个隐藏层则是全连接层。输出层则是 1,000 的 softmax，对应于 1,000 种分类。下面给出了网络的架构图，来自 KSH 的论文。我们会给出详细的解释。注意很多层被分解为 2 个部分，对应于 2 个 GPU。
+KSH 网络有 $$7$$ 个隐藏层。前 $$5$$ 个隐藏层是卷积层（可能会包含 max-pooling），而后两个隐藏层则是全连接层。输出层则是 $$1,000$$ 的 softmax，对应于 $$1,000$$ 种分类。下面给出了网络的架构图，来自 KSH 的论文。我们会给出详细的解释。注意很多层被分解为 $$2$$ 个部分，对应于 $$2$$ 个 GPU。
 
 ![Paste_Image.png](http://upload-images.jianshu.io/upload_images/42741-567fae96c8f08f4c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-输出层包含 3*224*224 神经元，表示一幅 224*224 的图像的RGB 值。回想一下，ImageNet 包含不同分辨率的图像。这里也会有问题，因为神经网络输入层通常是固定的大小。KSH 通过将每幅图进行的重设定，使得短的边长度为 256。然后在重设后的图像上裁剪出 256*256 的区域。最终 KSH 从 256*256 的图像中抽取出随机的 224*224 的子图（和水平反射）。他们使用随机的方式，是为了扩展训练数据，这样能够缓解过匹配的情况。在大型网络中这样的方法是很有效的。这些 224 * 224 的图像就成为了网络的输入。在大多数情形下，裁剪的图像仍会包含原图中主要的对象。
+输出层包含 $$3\times 224\times 224$$ 神经元，表示一幅 $$224\times 224$$ 的图像的RGB 值。回想一下，ImageNet 包含不同分辨率的图像。这里也会有问题，因为神经网络输入层通常是固定的大小。KSH 通过将每幅图进行的重设定，使得短的边长度为 256。然后在重设后的图像上裁剪出 256*256 的区域。最终 KSH 从 256*256 的图像中抽取出随机的 224*224 的子图（和水平反射）。他们使用随机的方式，是为了扩展训练数据，这样能够缓解过匹配的情况。在大型网络中这样的方法是很有效的。这些 224 * 224 的图像就成为了网络的输入。在大多数情形下，裁剪的图像仍会包含原图中主要的对象。
 
 现在看看 KSH 的隐藏层，第一隐藏层是一个卷积层，还有 max-pooling。使用了大小为 11*11 的局部感应区，和大小为 4 的步长。总共有 96 个特征映射。特征映射被分成两份，分别存放在两块 GPU 上。max-pooling 在这层和下层都是 3*3 区域进行，由于允许使用重叠的 pooling 区域，pooling 层其实会产生两个像素值。
 > Pooling layers in CNNs summarize the outputs of neighboring groups of neurons in the same kernel map. Traditionally, the neighborhoods summarized by adjacent pooling units do not overlap (e.g., [17, 11, 4]). To be more precise, a pooling layer can be thought of as consisting of a grid of pooling units spaced s pixels apart, each summarizing a neighborhood of size z × z centered at the location of the pooling unit. If we set s = z, we obtain traditional local pooling as commonly employed in CNNs. If we set s < z, we obtain overlapping pooling. This is what we use throughout our network, with s = 2 and z = 3. This scheme reduces the top-1 and top-5 error rates by 0.4% and 0.3%, respectively, as compared with the non-overlapping scheme s = 2, z = 2, which produces output of equivalent dimensions. We generally observe during training that models with overlapping pooling find it slightly more difficult to overfit.
