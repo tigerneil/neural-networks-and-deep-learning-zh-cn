@@ -173,6 +173,7 @@
 
 其中 $$\Sigma'(z^L)$$ 是一个方阵，其对角线的元素是 $$\sigma'(z_j^L)$$，其他的元素均是 $$0$$。注意，这个矩阵通过一般的矩阵乘法作用在 $$\nabla_a C$$ 上。(2) 证明(BP2) 可以写成
 ![](http://upload-images.jianshu.io/upload_images/42741-a9e602c96bf3944d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 (3) 结合(1)和(2) 证明
 ![](http://upload-images.jianshu.io/upload_images/42741-e007db9f4371469c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
