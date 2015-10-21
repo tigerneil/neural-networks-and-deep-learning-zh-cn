@@ -109,7 +109,7 @@
 
 ![](http://upload-images.jianshu.io/upload_images/42741-1ce986b0e5325cda.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-这是一个非常自然的表达式。右式第一个项 $$\partial C/\partial a_j^L$$ 表示代价随着 $$j^{th}$$ 输出激活值的变化而变化的速度。假如 $$C$$ 不太依赖一个特定的输出神经元 $$j$$，那么$$\delta_j^L$$ 就会很小，这也是我们想要的效果。右式第二项 $$\sigma'(z_j^L)$$ 刻画了在 $$z_j^L$$ 处激活函数 $$\sigma$$ 变化的速度。
+这是一个非常自然的表达式。右式第一个项 $$\partial C/\partial a_j^L$$ 表示代价随着 $$j^{th}$$ 输出激活值的变化而变化的速度。假如 $$C$$ 不太依赖一个特定的输出神经元 $$j$$，那么$$\delta_j^L$$ 就会很小，这也是我们想要的效果。右式第二项 $$\sigma'(z_j^L)$$ 刻画了在 $$z_j^L$$ 处激活函数 $$\sigma$$ 变化的速度。
 
 注意到在 BP1 中的每个部分都是很好计算的。特别地，我们在前向传播计算网络行为时已经计算过 $$z_j^L$$，这仅仅需要一点点额外工作就可以计算 $$\sigma'(z_j^L)$$。当然 $$\partial C/\partial a_j^L$$ 依赖于代价函数的形式。然而，给定了代价函数，计算$$\partial C/\partial a_j^L$$就没有什么大问题了。例如，如果我们使用二次函数，那么 $$C = \frac{1}{2} \sum_j(y_j-a_j)^2$$，所以 $$\partial C/\partial a_j^L = (a_j - y_j)$$，这其实很容易计算。
 
