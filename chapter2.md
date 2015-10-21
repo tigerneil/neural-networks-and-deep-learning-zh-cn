@@ -342,7 +342,7 @@ def sigmoid_prime(z):
 
 这给出了一种可能的计算 $$\frac{\partial C}{\partial w_{jk}^l}$$ 的方法其实是细致地追踪一个 $$w_{jk}^l$$ 的微小变化如何导致 $$C$$ 中的变化值。如果我们可以做到这点，能够精确地使用易于计算的量来表达每种关系，那么我们就能够计算 $$\frac{\partial C}{\partial w_{jk}^l}$$ 了。
 
-我们尝试一下这个方法。$$\Delta w_{jk}^l$$ 导致了在 $$lth$$ 层 $$jth$$ 神经元的激活值的变化 $$\Delta a_j^l$$。这个变化由下面的公式给出：
+我们尝试一下这个方法。$$\Delta w_{jk}^l$$ 导致了在 $$l^{th}$$ 层 $$j^{th}$$ 神经元的激活值的变化 $$\Delta a_j^l$$。这个变化由下面的公式给出：
 
 ![](http://upload-images.jianshu.io/upload_images/42741-21f066b942ca21e4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
