@@ -69,7 +69,7 @@
 
 # Hadamard 乘积
 ---
-反向传播算法基于常规的线性代数运算——诸如向量加法，向量矩阵乘法等。但是有一个运算不大常见。特别地，假设 s 和 t 是两个同样维度的向量。那么我们使用 $$s\odot t$$ 来表示按元素的乘积。所以 $$s\odot t$$ 的元素就是 $$(s\odot t)_j = s_j t_j$$。给个例子，
+反向传播算法基于常规的线性代数运算——诸如向量加法，向量矩阵乘法等。但是有一个运算不大常见。特别地，假设 $$s $$和 $$t$$ 是两个同样维度的向量。那么我们使用 $$s\odot t$$ 来表示按元素的乘积。所以 $$s\odot t$$ 的元素就是 $$(s\odot t)_j = s_j t_j$$。给个例子，
 
 ![](http://upload-images.jianshu.io/upload_images/42741-a4587053fbae76aa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
