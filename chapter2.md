@@ -168,7 +168,7 @@
 ![](http://upload-images.jianshu.io/upload_images/42741-2c37512768834c28.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 ## 问题
-* **另一种反向传播方程的表示方式**：我已经给出了使用了 Hadamard 乘积的反向传播的公式。如果你对这种特殊的乘积不熟悉，可能会有一些困惑。下面还有一种表示方式，那就是基于传统的矩阵乘法，某些读者可能会觉得很有启发。(1) 证明 (BP1) 可以写成
+**另一种反向传播方程的表示方式**：我已经给出了使用了 Hadamard 乘积的反向传播的公式。如果你对这种特殊的乘积不熟悉，可能会有一些困惑。下面还有一种表示方式，那就是基于传统的矩阵乘法，某些读者可能会觉得很有启发。(1) 证明 (BP1) 可以写成
 ![](http://upload-images.jianshu.io/upload_images/42741-06ebdd4a212cfcbe.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 其中 $$\Sigma'(z^L)$$ 是一个方阵，其对角线的元素是 $$\sigma'(z_j^L)$$，其他的元素均是 $$0$$。注意，这个矩阵通过一般的矩阵乘法作用在 $$\nabla_a C$$ 上。(2) 证明(BP2) 可以写成
