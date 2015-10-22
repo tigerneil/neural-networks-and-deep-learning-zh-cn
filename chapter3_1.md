@@ -144,7 +144,7 @@
 
 ![](http://upload-images.jianshu.io/upload_images/42741-5c38ff3dd38581ba.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-而其中 $$−[y\ln y+(1−y)\ln(1−y)]$$ 有时候被称为 [二元熵](http://en.wikipedia.org/wiki/Binary_entropy_function)
+而其中 $$−[y\ln y+(1−y)\ln (1−y)]$$ 有时候被称为 [二元熵](http://en.wikipedia.org/wiki/Binary_entropy_function)
 
 ## 问题
 * **多层多神经元网络** 用上一章的定义符号，证明对二次代价函数，关于输出层的权重的偏导数为
