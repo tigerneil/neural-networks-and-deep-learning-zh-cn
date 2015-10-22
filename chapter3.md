@@ -286,21 +286,3 @@ softmax 的想法其实就是为神经网络定义一种新式的输出层。开
 
 > 请注意这里的表示上的差异，这里的 $$y$$ 和之前的目标输出值不同，是离散的向量表示，对应位的值为 $$1$$，而其他为 $$0$$。
 
-这些方程其实和我们前面对交叉熵得到的类似。就拿方程(82) 和 (67) 比较。尽管后者我对整个训练样本进行了平均，不过形式还是一致的。而且，正如前面的分析，这些表达式确保我们不会遇到学习缓慢的问题。实际上，将 softmax 输出层和 log-likelihood 组合对照 sigmoid 输出层和交叉熵的组合类比着看是非常有用的。
-
-有了这样的相似性，你会使用哪一种呢？实际上，在很多应用场景中，这两种方式的效果都不错。本章剩下的内容，我们会使用 sigmoid 输出层和交叉熵的组合。后面，在第六章中，我们有时候会使用 softmax 输出层和 log-likelihood 的则和。切换的原因就是为了让我们的网络和某些在具有影响力的学术论文中的形式更为相似。作为一种更加通用的视角，softmax 加上 log-likelihood 的组合更加适用于那些需要将输出激活值解释为概率的场景。当然这不总是合理的，但是在诸如 MNIST 这种有着不重叠的分类问题上确实很有用。
-
-## 问题
-* 推导方程(81) 和 (82)
-* **softmax 这个名称从何处来？** 假设我们改变一下 softmax 函数，使得输出激活值定义如下
-
-![](http://upload-images.jianshu.io/upload_images/42741-5b3e8cf9fceece21.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-
-其中 $$c$$ 是正的常量。注意 $$c=1$$ 对应标准的 softmax 函数。但是如果我们使用不同的 $$c$$ 得到不同的函数，其实最终的量的结果却和原来的 softmax 差不多。特别地，证明输出激活值也会形成一个概率分布。假设我们允许 $$c$$ 足够大，比如说 $$c\rightarrow \infty$$。那么输出激活值 $$a_j^L$$ 的极限值是什么？在解决了这个问题后，你应该能够理解 $$c=1$$ 对应的函数是一个最大化函数的 softened 版本。这就是 softmax 的来源。
-> 这让我联想到 EM 算法，对 k-Means 算法的一种推广。
-
-* **softmax 和 log-likelihood 的反向传播** 上一章，我们推到了使用 sigmoid 层的反向传播算法。为了应用在 softmax 层的网络上，我们需要搞清楚最后一层上误差的表示 $$\delta_j^L \equiv \partial C/\partial z_j^L$$。证明形式如下：
-
-![](http://upload-images.jianshu.io/upload_images/42741-73905c0ac973a00d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-
-使用这个表达式，我们可以应用反向传播在采用了 softmax 输出层和 log-likelihood 的网络上。
