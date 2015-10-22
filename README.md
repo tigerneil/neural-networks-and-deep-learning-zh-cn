@@ -9,7 +9,7 @@
 想了解本书选择的观点的更多细节，请看[这里](http://neuralnetworksanddeeplearning.com/about.html)。或者直接跳到[第一章](http://neuralnetworksanddeeplearning.com/chap1.html) 开始你们的旅程。
 
 ---
-译者的话：
+###译者的话：
 
 本书是 Michael Nielsen 的 Neural Networks and Deep Learning 的中译本。目前已经完成第二章、第五章和第六章的内容。后续会进行剩下章节的翻译。可以通过 xhzhu.nju@gmail.com 联系到我。
 
