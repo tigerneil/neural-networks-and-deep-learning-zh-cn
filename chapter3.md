@@ -296,7 +296,7 @@ softmax 的想法其实就是为神经网络定义一种新式的输出层。开
 
 ![](http://upload-images.jianshu.io/upload_images/42741-5b3e8cf9fceece21.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-其中 $$c$$ 是正的常量。注意 $$c=1$$ 对应标准的 softmax 函数。但是如果我们使用不同的 $$c$$ 得到不同的函数，其实最终的量的结果却和原来的 softmax 差不多。特别地，证明输出激活值也会形成一个概率分布。假设我们允许 $$c$$ 足够大，比如说 $$c\rightarrow \infinity$$。那么输出激活值 $$a_j^L$$ 的极限值是什么？在解决了这个问题后，你应该能够理解 c=1 对应的函数是一个最大化函数的 softened 版本。这就是 softmax 的来源。
+其中 $$c$$ 是正的常量。注意 $$c=1$$ 对应标准的 softmax 函数。但是如果我们使用不同的 $$c$$ 得到不同的函数，其实最终的量的结果却和原来的 softmax 差不多。特别地，证明输出激活值也会形成一个概率分布。假设我们允许 $$c$$ 足够大，比如说 $$c\rightarrow \infty$$。那么输出激活值 $$a_j^L$$ 的极限值是什么？在解决了这个问题后，你应该能够理解 c=1 对应的函数是一个最大化函数的 softened 版本。这就是 softmax 的来源。
 > 这让我联想到 EM 算法，对 k-Means 算法的一种推广。
 
 * **softmax 和 log-likelihood 的反向传播** 上一章，我们推到了使用 sigmoid 层的反向传播算法。为了应用在 softmax 层的网络上，我们需要搞清楚最后一层上误差的表示 $$\delta_j^L \equiv \partial C/\partial z_j^L$$。证明形式如下：
