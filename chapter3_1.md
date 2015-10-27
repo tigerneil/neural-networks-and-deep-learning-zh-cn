@@ -95,7 +95,7 @@
 ![](http://upload-images.jianshu.io/upload_images/42741-05567745404c5dcd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 ## 练习
-* 验证 \sigma'(z) = \sigma(z)(1-\sigma(z))。
+* 验证 $$\sigma'(z) = \sigma(z)(1-\sigma(z))$$。
 
 让我们重回最原初的例子，来看看换成了交叉熵之后的学习过程。现在仍然按照前面的参数配置来初始化网络，开始权重为 $$0.6$$，而偏差为 $$0.9$$。点击“Run”按钮看看在换成交叉熵之后网络的学习情况：
 
