@@ -240,7 +240,7 @@ class Network(object):
         self.biases = [b-(eta/len(mini_batch))*nb 
                        for b, nb in zip(self.biases, nabla_b)]
 ```
-主要工作其实是在 `delta_nabla_b, delta_nabla_w = self.backprop(x, y)` 这里完成的，调用了 `backprop` 方法计算出了偏导数，$$\partial C_x/\partial b_j^l$$ 和 $$\partial C_x/\partial w_{jk}^l$$。反向传播方法跟上一节的算法基本一致。这里只有个小小的差异——我们使用一个略微不同的方式来索引神经网络的层。这个改变其实是为了 Python 的特性——负值索引的使用能够让我们从列表的最后往前遍历，如 `l[-3]` 其实是列表中的倒数第三个元素。下面 `backprop` 的代码，使用了一些用来计算 $$\sigma$$、导数 $$\sigma'$$ 及代价函数的导数帮助函数。所以理解了这些，我们就完全可以掌握所有的代码了。如果某些东西让你困惑，你可能需要参考[代码的原始描述](http://neuralnetworksanddeeplearning.com/chap1.html#implementing_our_network_to_classify_digits)
+主要工作其实是在 `delta_nabla_b, delta_nabla_w = self.backprop(x, y)` 这里完成的，调用了 `backprop` 方法计算出了偏导数，$$\partial C_x/\partial b_j^l$$ 和 $$\partial C_x/\partial w_{jk}^l$$。反向传播方法跟上一节的算法基本一致。这里只有个小小的差异——我们使用一个略微不同的方式来索引神经网络的层。这个改变其实是为了 Python 的特性——负值索引的使用能够让我们从列表的最后往前遍历，如 `l[-3]` 其实是列表中的倒数第三个元素。下面 `backprop` 的代码，使用了一些用来计算 $$\sigma$$、导数 $$\sigma'$$ 及代价函数的导数帮助函数。所以理解了这些，我们就完全可以掌握所有的代码了。如果某些东西让你困惑，你可能需要参考[代码的原始描述](http://neuralnetworksanddeeplearning.com/chap1.html#implementing_our_network_to_classify_digits)
 ```python
 class Network(object):
 ...
