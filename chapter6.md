@@ -6,11 +6,11 @@
 
 本章主要的部分是对最为流行神经网络之一的**深度卷积网络**的介绍。我们将细致地分析一个使用卷积网络来解决 MNIST 数据集的手写数字识别的例子（包含了代码和讲解）：
 
-![MNIST 数据集样例](http://upload-images.jianshu.io/upload_images/42741-d90e10885a3f7c48.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![MNIST 数据集样例](images/159.png)
 
 我们将从浅层的神经网络开始来解决上面的问题。通过多次的迭代，我们会构建越来越强大的网络。在这个过程中，也将要探究若干强大技术：卷积、pooling、使用GPU来更好地训练、训练数据的算法性扩展（避免过匹配）、dropout 技术的使用（同样为了防止过匹配现象）、网络的 ensemble 使用 和 其他技术。最终的结果能够接近人类的表现。在 10,000 幅 MNIST 测试图像上 —— 模型从未在训练中接触的图像 —— 该系统最终能够将其中 9,967 幅正确分类。这儿我们看看错分的 33 幅图像。注意正确分类是右上的标记；系统产生的分类在右下：
 
-![深度神经网络在 MNIST 实验中的性能](http://upload-images.jianshu.io/upload_images/42741-415c0a3bd308b7a5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![深度神经网络在 MNIST 实验中的性能](images/160.png)
 
 可以发现，这里面的图像对于正常人类来说都是非常困难区分的。例如，在第一行的第三幅图。我看的话，看起来更像是 “9” 而非 “8”，而 “8” 却是给出的真实的结果。我们的网络同样能够确定这个是 “9”。这种类型的“错误” 最起码是容易理解的，可能甚至值得我们赞许。最后用对最近使用深度（卷积）神经网络在图像识别上的研究进展作为关于图像识别的讨论的总结。
 
@@ -24,11 +24,11 @@
 ---
 在前面的章节中，我们教会了神经网络能够较好地识别手写数字：
 
-![MNIST 手写数字](http://upload-images.jianshu.io/upload_images/42741-424f2dfc9f5ffd2c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![MNIST 手写数字](images/161.png)
 
 我们在深度神经网络中使用全连接的邻接关系。网络中的神经元与相邻的层上的所有神经元均连接：
 
-![全连接深度神经网络](http://upload-images.jianshu.io/upload_images/42741-d9ebe937f592d330.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![全连接深度神经网络](images/162.png)
 
 特别地，对输入图像中的每个像素点，我们将其光强度作为对应输入层神经元的输入。对于 $$28 \times 28$$ 像素的图像，这意味着我们输入神经元需要有 $$784(=28 \times 28)$$ 个。
 
@@ -41,6 +41,7 @@
 如果你要继续跟下去，就需要安装 Theano。跟随[这些参考](http://deeplearning.net/software/theano/) 就可以安装 Theano 了。后面的例子在 Theano 0.6 上运行。有些是在 Mac OS X Yosemite上，没有 GPU。有些是在 Ubuntu 14.4 上，有 NVIDIA GPU。还有一些在两种情况都有运行。为了让 `network3.py` 运行，你需要在 `network3.py` 的源码中将 `GPU` 置为 True 或者 False。除此之外，让 Theano 在 GPU 上运行，你可能要参考 [the instructions here](http://deeplearning.net/software/theano/tutorial/using_gpu.html)。网络上还有很多的教程，用 Google 很容易找到。如果没有 GPU，也可以使用 [Amazon Web Services](http://aws.amazon.com/ec2/instance-types/) EC2 G2 spot instances。注意即使是 GPU，训练也可能花费很多时间。很多实验花了数分钟或者数小时才完成。在 CPU 上，则可能需要好多天才能运行完最复杂的实验。正如在前面章节中提到的那样，我建议你搭建环境，然后阅读，偶尔回头再检查代码的输出。如果你使用 CPU，可能要降低训练的次数，甚至跳过这些实验。
 
 为了获得一个基准，我们将启用一个浅层的架构，仅仅使用单一的隐藏层，包含 $$100$$ 个隐藏元。训练 $$60$$ 次，使用学习率为 $$\eta = 0.1$$，mini-batch 大小为 $$10$$，无规范化。Let‘s go：
+
 ```python
 >>> import network3
 >>> from network3 import Network
@@ -54,6 +55,7 @@
 ## 卷积网络的代码
 ---
 好了，现在来看看我们的卷积网络代码，`network3.py`。整体看来，程序结构类似于 `network2.py`，尽管细节有差异，因为我们使用了 Theano。首先我们来看 FullyConnectedLayer 类，这类似于我们之前讨论的那些神经网络层。下面是代码
+
 ```python
 class FullyConnectedLayer(object):
 
@@ -89,6 +91,7 @@ class FullyConnectedLayer(object):
         "Return the accuracy for the mini-batch."
         return T.mean(T.eq(y, self.y_out))
 ```
+
 `__init__` 方法中的大部分都是可以自解释的，这里再给出一些解释。我们根据正态分布随机初始化了权重和偏差。代码中对应这个操作的一行看起来可能很吓人，但其实只在进行载入权重和偏差到 Theano 中所谓的共享变量中。这样可以确保这些变量可在 GPU 中进行处理。对此不做过深的解释。如果感兴趣，可以查看[Theano documentation](http://deeplearning.net/software/theano/index.html)。而这种初始化的方式也是专门为 sigmoid 激活函数设计的（参见[这里](http://neuralnetworksanddeeplearning.com/chap3.html#weight_initialization)）。理想的情况是，我们初始化权重和偏差时会根据不同的激活函数（如 tanh 和 Rectified Linear Function）进行调整。这个在下面的问题中会进行讨论。初始方法 `__init__` 以 `self.params = [self.W, self.b]` 结束。这样将该层所有需要学习的参数都归在一起。后面，`Network.SGD` 方法会使用 `params` 属性来确定网络实例中什么变量可以学习。
 
 `set_inpt` 方法用来设置该层的输入，并计算相应的输出。我使用 `inpt` 而非 `input` 因为在python 中 `input` 是一个内置函数。如果将两者混淆，必然会导致不可预测的行为，对出现的问题也难以定位。注意我们实际上用两种方式设置输入的：`self.input` 和 `self.inpt_dropout`。因为训练时我们可能要使用 dropout。如果使用 dropout，就需要设置对应丢弃的概率 `self.p_dropout`。这就是在`set_inpt` 方法的倒数第二行 `dropout_layer` 做的事。所以 `self.inpt_dropout` 和 `self.output_dropout`在训练过程中使用，而 self.inpt 和 self.output 用作其他任务，比如衡量验证集和测试集模型的准确度。
@@ -100,6 +103,7 @@ class FullyConnectedLayer(object):
 不大明显的，在我们引入[softmax layer](http://neuralnetworksanddeeplearning.com/chap3.html#softmax) 时，我们没有讨论如何初始化权重和偏差。其他地方我们已经讨论过对 sigmoid 层，我们应当使用合适参数的正态分布来初始化权重。但是这个启发式的论断是针对 sigmoid 神经元的（做一些调整可以用于 tanh 神经元上）。但是，并没有特殊的原因说这个论断可以用在 softmax 层上。所以没有一个先验的理由应用这样的初始化。与其使用之前的方法初始化，我这里会将所有权值和偏差设置为 $$0$$。这是一个 ad hoc 的过程，但在实践使用过程中效果倒是很不错。
 
 好了，我们已经看过了所有关于层的类。那么 Network 类是怎样的呢？让我们看看 `__init__` 方法：
+
 ```python
 class Network(object):
     
@@ -123,12 +127,15 @@ class Network(object):
         self.output = self.layers[-1].output
         self.output_dropout = self.layers[-1].output_dropout
 ```
+
 这段代码大部分是可以自解释的。`self.params = [param for layer in ...]` 此行代码对每层的参数捆绑到一个列表中。`Network.SGD` 方法会使用 `self.params` 来确定 `Network` 中哪些变量需要学习。而 `self.x = T.matrix("x")` 和 `self.y = T.ivector("y")` 则定义了 Theano 符号变量 x 和 y。这些会用来表示输入和网络得到的输出。
 
 这儿不是 Theano 的教程，所以不会深度讨论这些变量指代什么东西。但是粗略的想法就是这些代表了数学变量，而非显式的值。我们可以对这些变量做通常需要的操作：加减乘除，作用函数等等。实际上，Theano 提供了很多对符号变量进行操作方法，如卷积、max-pooling等等。但是最重要的是能够进行快速符号微分运算，使用 BP 算法一种通用的形式。这对于应用随机梯度下降在若干种网络结构的变体上特别有效。特别低，接下来几行代码定义了网络的符号输出。我们通过下面这行
+
 ```python
 init_layer.set_inpt(self.x, self.x, self.mini_batch_size)
 ```
+
 设置初始层的输入。
 
 请注意输入是以每次一个 mini-batch 的方式进行的，这就是 mini-batch size 为何要指定的原因。还需要注意的是，我们将输入 `self.x` 传了两次：这是因为我们我们可能会以两种方式（有dropout和无dropout）使用网络。`for` 循环将符号变量 `self.x` 通过 `Network` 的层进行前向传播。这样我们可以定义最终的输出 `output` 和 `output_dropout` 属性，这些都是 `Network` 符号式输出。
@@ -216,7 +223,9 @@ def SGD(self, training_data, epochs, mini_batch_size, eta,
             best_validation_accuracy, best_iteration))
         print("Corresponding test accuracy of {0:.2%}".format(test_accuracy))
 ```
+
 前面几行很直接，将数据集分解成 x 和 y 两部分，并计算在每个数据集中 mini-batch 的数量。接下来的几行更加有意思，这也体现了 Theano 有趣的特性。那么我们就摘录详解一下：
+
 ```python
 # define the (regularized) cost function, symbolic gradients, and updates 
 l2_norm_squared = sum([(layer.w**2).sum() for layer in self.layers]) 
@@ -224,6 +233,7 @@ cost = self.layers[-1].cost(self)+\ 0.5*lambda*l2_norm_squared/num_training_batc
 grads = T.grad(cost, self.params) 
 updates = [(param, param-eta*grad) for param, grad in zip(self.params, grads)]
 ```
+
 这几行，我们符号化地给出了规范化的 log-likelihood 代价函数，在梯度函数中计算了对应的导数，以及对应参数的更新方式。Theano 让我们通过这短短几行就能够获得这些效果。唯一隐藏的是计算 `cost` 包含一个对输出层 `cost` 方法的调用；该代码在 `network3.py` 中其他地方。但是，总之代码很短而且简单。有了所有这些定义好的东西，下面就是定义 `train_mini_batch` 函数，该 Theano 符号函数在给定 minibatch 索引的情况下使用 `updates` 来更新 `Network` 的参数。类似地，`validate_mb_accuracy` 和 `test_mb_accuracy` 计算在任意给定的 minibatch 的验证集和测试集合上 `Network` 的准确度。通过对这些函数进行平均，我们可以计算整个验证集和测试数据集上的准确度。
 
 `SGD` 方法剩下的就是可以自解释的了——我们对次数进行迭代，重复使用 训练数据的 minibatch 来训练网络，计算验证集和测试集上的准确度。
@@ -532,7 +542,9 @@ def dropout_layer(layer, p_dropout):
     mask = srng.binomial(n=1, p=1-p_dropout, size=layer.shape)
     return layer*T.cast(mask, theano.config.floatX)
 ```
+
 ### 问题
+
 * 目前，`SGD` 方法需要用户手动确定训练的次数（epoch）。早先在本书中，我们讨论了一种自动选择训练次数的方法，也就是[early stopping](http://neuralnetworksanddeeplearning.com/chap3.html#early_stopping)。修改 `network3.py` 以实现 Early stopping。
 
 * 增加一个 `Network` 方法来返回在任意数据集上的准确度。
@@ -559,8 +571,7 @@ def dropout_layer(layer, p_dropout):
 
 **The 2012 LRMD paper**：让我们从一篇来自 Stanford 和 Google 的研究者的论文开始。后面将这篇论文简记为 LRMD，前四位作者的姓的首字母命名。LRMD 使用神经网络对 [ImageNet](http://www.image-net.org/) 的图片进行分类，这是一个具有非常挑战性的图像识别问题。2011 年 ImageNet 数据包含了 $$16,000,000$$ 的全色图像，有 $$20,000$$ 个类别。图像从开放的网络上爬去，由 Amazon Mechanical Turk 服务的工人分类。下面是几幅 ImageNet 的图像：
 
-
-![Paste_Image.png](http://upload-images.jianshu.io/upload_images/42741-008dc2948e673cba.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![Paste_Image.png](images/163.png)
 
 上面这些分别属于 **圆线刨**，**棕色烂根须**，**加热的牛奶**，及 **通常的蚯蚓**。如果你想挑战一下，你可以访问[hand tools](http://www.image-net.org/synset?wnid=n03489162)，里面包含了一系列的区分的任务，比如区分 **圆线刨**、**短刨**、**倒角刨**以及其他十几种类型的刨子和其他的类别。我不知道读者你是怎么样一个人，但是我不能将所有这些工具类型都确定地区分开。这显然是比 MNIST 任务更具挑战性的任务。LRMD 网络获得了不错的 15.8% 的准确度。这看起很不给力，但是在先前最优的 9.3% 准确度上却是一个大的突破。这个飞跃告诉人们，神经网络可能会成为一个对非常困难的图像识别任务的强大武器。
 
@@ -572,7 +583,7 @@ ILSVRC 竞赛中一个难点是许多图像中包含多个对象。假设一个�
 
 KSH 网络有 $$7$$ 个隐藏层。前 $$5$$ 个隐藏层是卷积层（可能会包含 max-pooling），而后两个隐藏层则是全连接层。输出层则是 $$1,000$$ 的 softmax，对应于 $$1,000$$ 种分类。下面给出了网络的架构图，来自 KSH 的论文。我们会给出详细的解释。注意很多层被分解为 $$2$$ 个部分，对应于 $$2$$ 个 GPU。
 
-![Paste_Image.png](http://upload-images.jianshu.io/upload_images/42741-567fae96c8f08f4c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![Paste_Image.png](images/164.png)
 
 输出层包含 $$3\times 224\times 224$$ 神经元，表示一幅 $$224\times 224$$ 的图像的RGB 值。回想一下，ImageNet 包含不同分辨率的图像。这里也会有问题，因为神经网络输入层通常是固定的大小。KSH 通过将每幅图进行的重设定，使得短的边长度为 256。然后在重设后的图像上裁剪出 $$256\times 256$$ 的区域。最终 KSH 从 $$256\times 256$$ 的图像中抽取出随机的 $$224\times  224$$ 的子图（和水平反射）。他们使用随机的方式，是为了扩展训练数据，这样能够缓解过匹配的情况。在大型网络中这样的方法是很有效的。这些 $$224 \times 224$$ 的图像就成为了网络的输入。在大多数情形下，裁剪的图像仍会包含原图中主要的对象。
 
@@ -606,7 +617,7 @@ KSH 网络使用了很多的技术。放弃了 sigmoid 或者 tanh 激活函数�
 
 我可能已经留下了印象——所有的结果都是令人兴奋的正面结果。当然，目前一些有趣的研究工作也报道了一些我们还没能够真的理解的根本性的问题。例如，2013 年一篇论文指出，深度网络可能会受到有效忙点的影响。看看下面的图示。左侧是被网络正确分类的 ImageNet 图像。右边是一幅稍受干扰的图像（使用中间的噪声进行干扰）结果就没有能够正确分类。作者发现对每幅图片都存在这样的“对手”图像，而非少量的特例。
 
-![Paste_Image.png](http://upload-images.jianshu.io/upload_images/42741-b1fa702c30444605.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![Paste_Image.png](images/165.png)
 
 这是一个令人不安的结果。论文使用了基于同样的被广泛研究使用的 KSH 代码。尽管这样的神经网络计算的函数在理论上都是连续的，结果表明在实际应用中，可能会碰到很多非常不连续的函数。更糟糕的是，他们将会以背离我们直觉的方式变得不连续。真是烦心啊。另外，现在对这种不连续性出现的原因还没有搞清楚：是跟损失函数有关么？或者激活函数？又或是网络的架构？还是其他？我们一无所知。
 
@@ -618,6 +629,7 @@ KSH 网络使用了很多的技术。放弃了 sigmoid 或者 tanh 激活函数�
 虽然遇到这么多的困难，前途倒还是光明的。我们看到了在众多相当困难的基准任务上快速的研究进展。同样还有实际问题的研究进展，例如前面提到的街景数字的识别。但是需要注意的是，仅仅看到在那些基准任务，乃至实际应用的进展，是不够的。因为还有很多根本性的现象，我们对其了解甚少，就像对手图像的存在问题。当这样根本性的问题还亟待发现（或者解决）时，盲目地说我们已经接近最终图像识别问题的答案就很不合适了。这样的根本问题当然也会催生出不断的后续研究。
 
 ## 其他的深度学习模型
+
 在整本书中，我们聚焦在解决 MNIST 数字分类问题上。这一“下金蛋的”问题让我们深入理解了一些强大的想法：随机梯度下降，BP，卷积网络，正规化等等。但是该问题却也是相当狭窄的。如果你研读过神经网络的研究论文，那么会遇到很多这本书中未曾讨论的想法：RNN，Boltzmann Machine，生成式模型，迁移学习，强化学习等等……等等！（太多了）神经网络是一个广阔的领域。然而，很多重要的想法都是我们书中探讨过的那些想法的变种，在有了本书的知识基础上，可能需要一些额外的努力，便可以理解这些新的想法了。所以在本节，我们给出这些想法的一些介绍。介绍本身不会非常细节化，可能也不会很深入——倘若要达成这两点，这本书就得扩展相当多内容了。因此，我们接下来的讨论是偏重思想性的启发，尝试去激发这个领域的产生丰富的概念，并将一些丰富的想法关联于前面已经介绍过的概念。我也会提供一些其他学习资源的连接。当然，链接给出的很多想法也会很快被超过，所以推荐你学会搜索最新的研究成果。尽管这样，我还是很期待众多本质的想法能够受到足够久的关注。
 
 **Recurrent Neural Networks (RNNs)**：在前馈神经网络中，单独的输入完全确定了剩下的层上的神经元的激活值。可以想象，这是一幅静态的图景：网络中的所有事物都被固定了，处于一种“冰冻结晶”的状态。但假如，我们允许网络中的元素能够以动态方式不断地比那话。例如，隐藏神经元的行为不是完全由前一层的隐藏神经元，而是同样受制于更早的层上的神经元的激活值。这样肯定会带来跟前馈神经网络不同的效果。也可能隐藏和输出层的神经元的激活值不会单单由当前的网络输入决定，而且包含了前面的输入的影响。
@@ -648,6 +660,7 @@ DBN 在之后一段时间内很有影响力，但近些年前馈网络和 RNN �
 在本节的最后，我再提一篇特别有趣的论文。这篇文章将深度卷积网络和一种称为强化学习的技术来学习[玩电子游戏 play video games well](http://www.cs.toronto.edu/~vmnih/docs/dqn.pdf)（参考[这里 this followup](http://www.nature.com/nature/journal/v518/n7540/abs/nature14236.html)）。其想法是使用卷积网络来简化游戏界面的像素数据，将数据转化成一组特征的简化集合，最终这些信息被用来确定采用什么样的操作：“上”、“下”、“开火”等。特别有趣的是单一的网络学会 7 款中不同的经典游戏，其中 3 款网络的表现已经超过了人类专家。现在，这听起来是噱头，当然他们的标题也挺抓眼球的——“Playing Atari with reinforcement learning”。但是透过表象，想想系统以原始像素数据作为输入，它甚至不知道游戏规则！从数据中学会在几种非常不同且相当敌对的场景中做出高质量的决策，这些场景每个都有自己复杂的规则集合。所以这的解决是非常干净利落的。
 
 ## 神经网络的未来
+
 **意图驱动的用户接口**：有个很古老的笑话是这么说的：“一位不耐烦的教授对一个困惑的学生说道，‘不要光听我说了什么，要听懂我说的**含义**。’”。历史上，计算机通常是扮演了笑话中困惑的学生这样的角色，对用户表示的完全不知晓。而现在这个场景发生了变化。我仍然记得自己在 Google 搜索的打错了一个查询，搜索引擎告诉了我“你是否要的是[这个正确的查询]?”，然后给出了对应的搜索结果。Google 的 CEO Larry Page 曾经描述了最优搜索引擎就是准确理解用户查询的**含义**，并给出对应的结果。
 
 这就是意图驱动的用户接口的愿景。在这个场景中，不是直接对用户的查询词进行结果的反馈，搜索引擎使用机器学习技术对大量的用户输入数据进行分析，研究查询本身的含义，并通过这些发现来进行合理的动作以提供最优的搜索结果。
